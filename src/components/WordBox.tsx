@@ -1,12 +1,17 @@
+/** @jsxImportSource @emotion/react */
 import React from "react";
+import { css } from "@emotion/react";
+const wordBoxStyle = css`
+  & h1 {
+    font-size: 3.5rem;
+    color: skyblue;
+  }
+`;
 
-function WordBox({ word, dict }: any) {
-  console.log(word);
-  console.log(dict);
+function WordBox({ word }: { word: string }) {
   return (
-    <div>
+    <div css={wordBoxStyle}>
       <h1>{word}</h1>
-      <p>{dict}</p>
     </div>
   );
 }

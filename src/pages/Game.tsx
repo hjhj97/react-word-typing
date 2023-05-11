@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { getDict, getWord } from "../api/word";
@@ -6,6 +8,36 @@ import WordInput from "../components/WordInput";
 import WordHistory from "../components/WordHistory";
 import { useSetRecoilState } from "recoil";
 import { wordState } from "../state/atom";
+import { css } from "@emotion/react";
+
+const TitleStyle = css`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding-bottom: 1rem;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  font-size: 1.6rem;
+  color: skyblue;
+`;
+
+const Container = css`
+  display: flex;
+  margin: 4rem auto;
+  width: 400px;
+`;
+
+const WordWrapper = css`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+function Title() {
+  return <h1 css={TitleStyle}>Word Typing</h1>;
+}
 
 function Game() {
   const {
@@ -28,7 +60,7 @@ function Game() {
     () => {
       return getDictCb();
     },
-    { enabled: !!isWordLoaded, retry: 0 }
+    { enabled: !!isWordLoaded, retry: 0, refetchOnWindowFocus: false }
   );
 
   const getDictCb = () => {
@@ -53,11 +85,12 @@ function Game() {
   };
 
   return (
-    <div>
+    <div css={Container}>
       {isLoading && isDictLoading ? (
         <h1>Loading...</h1>
       ) : (
-        <div>
+        <div css={WordWrapper}>
+          <Title />
           <h5>{state}</h5>
           <WordBox word={res?.data} />
           {isError ? <p>Meanging Not Found</p> : <p>{dict?.data[0]?.meanings[0].definitions[0].definition}</p>}
