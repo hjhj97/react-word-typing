@@ -13,7 +13,7 @@ function Game() {
     isLoading,
     refetch,
   } = useQuery<any>(["word"], getWord, {
-    staleTime: 60 * 1000,
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
 
@@ -58,7 +58,7 @@ function Game() {
         <h1>Loading...</h1>
       ) : (
         <div>
-          <h2>{state}</h2>
+          <h5>{state}</h5>
           <WordBox word={res?.data} />
           {isError ? <p>Meanging Not Found</p> : <p>{dict?.data[0]?.meanings[0].definitions[0].definition}</p>}
           <WordInput onCheckWord={onCheckWord} state={state} />
