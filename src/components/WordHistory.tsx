@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { wordState } from "../state/atom";
 import { css } from "@emotion/react";
 
@@ -32,7 +32,6 @@ const historyStyle = css`
     border-radius: 2rem;
     list-style: none;
     font-weight: bold;
-
     font-size: 1.5rem;
     margin: 0.7rem 0;
   }
@@ -52,7 +51,7 @@ function WordHistory() {
         </button>
       )}
       {wordHistory.map((word: string) => (
-        <li>{word}</li>
+        <li key={word}>{word}</li>
       ))}
     </ul>
   );
