@@ -1,8 +1,20 @@
 import axios from "axios";
 
-export function getWord() {
-  return axios.get("https://random-word-api.herokuapp.com/word");
+export async function getWord() {
+  try {
+    const res = await axios.get("https://random-word-api.herokuapp.com/word");
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
-export function getDict(word: string) {
-  return axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+export async function getDict(word: string) {
+  try {
+    const res = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }

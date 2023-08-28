@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { getDict, getWord } from "../api/word";
 import WordBox from "../components/WordBox";
@@ -35,47 +35,52 @@ const WordWrapper = css`
   align-items: center;
 `;
 
+interface Dictionary {
+  data: {
+    meanings: {
+      definitions: {
+        definition: string;
+      }[];
+    }[];
+  }[];
+}
+
+export type AnswerStatus = "PENDING" | "CORRECT" | "INCORRECT";
+
 function Title() {
   return <h1 css={TitleStyle}>Word Typing</h1>;
 }
 
 function Game() {
+  const [dict, setDict] = useState<Dictionary | undefined>(undefined);
+  const [state, setState] = useState<AnswerStatus>("PENDING");
+  const setWordHistory = useSetRecoilState(wordState);
+
   const {
-    data: res,
+    data: wordRes,
     isLoading,
     refetch,
-  } = useQuery<any>(["word"], getWord, {
+  } = useQuery<{ data: string[] }>(["word"], getWord, {
     staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
 
-  let isWordLoaded = res?.data;
+  const wordMeaning = useMemo(() => dict?.data[0].meanings[0].definitions[0].definition ?? "", [dict]);
 
-  const {
-    data: dict,
-    isLoading: isDictLoading,
-    isError,
-  } = useQuery<any>(
-    ["getDict"],
-    () => {
-      return getDictCb();
-    },
-    { enabled: !!isWordLoaded, retry: 0, refetchOnWindowFocus: false }
-  );
-
-  const getDictCb = () => {
-    return getDict(res.data[0]);
-  };
-
-  const [state, setState] = useState("PENDING");
-  const setWordHistory = useSetRecoilState(wordState);
+  useEffect(() => {
+    if (wordRes?.data) {
+      getDict(wordRes.data[0])
+        .then((res) => setDict(res))
+        .catch((error) => setDict(undefined));
+    }
+  }, [wordRes]);
 
   const onCheckWord = async (input: string) => {
-    if (res.data[0] === input) {
+    if (wordRes === undefined) return;
+    if (wordRes.data[0] === input) {
       alert("correct");
       setState("CORRECT");
       setWordHistory((prev: string[]) => [...prev, input]);
-
       await refetch();
       setState("PENDING");
     } else {
@@ -86,14 +91,14 @@ function Game() {
 
   return (
     <div css={Container}>
-      {isLoading && isDictLoading ? (
+      {isLoading ? (
         <h1>Loading...</h1>
       ) : (
         <div css={WordWrapper}>
           <Title />
           <h5>{state}</h5>
-          <WordBox word={res?.data} />
-          {isError ? <p>Meanging Not Found</p> : <p>{dict?.data[0]?.meanings[0].definitions[0].definition}</p>}
+          <WordBox word={wordRes?.data[0] ?? ""} />
+          <p>{wordMeaning}</p>
           <WordInput onCheckWord={onCheckWord} state={state} />
           <WordHistory />
         </div>

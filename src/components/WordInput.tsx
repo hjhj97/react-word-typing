@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { css } from "@emotion/react";
+import { AnswerStatus } from "../pages/Game";
 
 const formStyle = css`
   & div {
@@ -28,7 +29,7 @@ const formStyle = css`
   }
 `;
 
-function WordInput({ state, onCheckWord }: any) {
+function WordInput({ state, onCheckWord }: { state: AnswerStatus; onCheckWord: (input: string) => Promise<void> }) {
   const { register, handleSubmit, reset } = useForm();
   useEffect(() => {
     reset();
