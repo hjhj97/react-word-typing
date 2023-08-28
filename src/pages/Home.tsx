@@ -1,16 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+/** @jsxImportSource @emotion/react */
+
+import { css } from "@emotion/react";
+import { Link } from "react-router-dom";
+
+const LinkStyle = css`
+  text-align: center;
+  text-decoration: none;
+  color: skyblue;
+`;
 
 function Home() {
-  const navigate = useNavigate();
   return (
-    <div
-      onClick={() => {
-        navigate("/game");
-      }}
-    >
-      Start Game
-    </div>
+    <Link css={LinkStyle} to="/game">
+      <h1>Start Game</h1>
+    </Link>
   );
 }
 
