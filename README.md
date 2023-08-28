@@ -13,6 +13,10 @@
 - `react-query`
 - `react-hook-form`
 
+## 시연
+
+![시연](https://github.com/hjhj97/react-word-typing/assets/37234431/4b950016-c008-4df4-af73-e5a2199cb883)
+
 ## 주요 로직
 
 1. `random-word-api.herokuapp.com`에서 API를 호출하여 임의의 영어 단어 하나를 불러옵니다. API를 호출할 때는 `axios`와 `react-query`를 조합하여 사용했습니다.
