@@ -1,46 +1,28 @@
-# Getting Started with Create React App
+# React Word Typing
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+랜덤 영단어 API 호출을 통해 타이핑하는 게임입니다.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+- `node.js v18.17.0`
+- `react 18`
+- `typescript`
+- `emotion`
+- `axios`
+- `recoil`
+- `react-query`
+- `react-hook-form`
 
-### `npm start`
+## 주요 로직
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. `random-word-api.herokuapp.com`에서 API를 호출하여 임의의 영어 단어 하나를 불러옵니다. API를 호출할 때는 `axios`와 `react-query`를 조합하여 사용했습니다.
+2. `Game.tsx`에 `wordRes`에 불러온 단어 정보를 저장합니다.
+3. 불러온 단어정보를 `api.dictionary.dev` API의 파라미터로 넣어 사전 정의(영어)를 불러옵니다. 해당 단어가 사전에 등재되어 있지 않을 경우 404 에러를 반환받습니다.
+4. 사전 정의를 정상적으로 불러왔다면 단어와 함께 화면에 표시합니다. 정의를 불러오지 못했다면 표시하지 않습니다.
+5. 사용자는 화면에 표시된 단어를 input창에 오타없이 입력해야 합니다.
+6. 단어를 정확히 입력했다면 정답 alert가 표시되고, 전역상태인 `recoil`을 통해 히스토리에 단어가 추가됩니다. 저장한 히스토리는 `WordHistory.tsx`에 데이터로 주입되어 input창 아래에 표시됩니다.
+7. 단어를 틀렸다면 오답 alert가 표시됩니다. 정확히 입력해야만 다음 문제로 넘어갈 수 있습니다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 개선하고 싶은 점
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- 경쟁모드 추가 : 10개 단어를 빠른 시간내에 입력하기
